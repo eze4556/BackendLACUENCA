@@ -1,5 +1,7 @@
 // controllers/eventoController.js
 const Evento = require('../models/evento');
+const Categoria = require('../models/categoria');
+
 
 
 const fs = require('fs');
