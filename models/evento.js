@@ -7,7 +7,7 @@ const eventoSchema = new mongoose.Schema({
   // nombre: { type: String},
   titulo: { type: String},
   fecha: { type: Date},
-  descripcion: { type: String }
+  descripcion: { type: String },
   categorias: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Categoria' }] // Referencia a la categoría
 
 });
