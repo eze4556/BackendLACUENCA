@@ -20,22 +20,65 @@ const path = require('path');
 //     res.status(500).json({ error: error.message });
 //   }
 // };
+
+
+
+
       
 
+// exports.createEvento = async (req, res) => {
+//   try {
+
+
+
+//     console.log('Body:', req.body); 
+//     console.log('File:', req.file); 
+//     const nuevoEvento = new Evento({
+
+//       imagen: req.file.path,
+//       titulo: req.body.titulo,
+//       fecha: req.body.fecha,
+//       descripcion: req.body.descripcion, 
+
+//     });
+//     await nuevoEvento.save();
+//     res.status(201).json({ message: 'Evento agregado exitosamente' });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+
+// Controlador para crear un nuevo evento
 exports.createEvento = async (req, res) => {
   try {
+    // Obtiene las categorías seleccionadas del cuerpo de la solicitud
+    const categoriasSeleccionadas = req.body.categorias;
 
     console.log('Body:', req.body); 
     console.log('File:', req.file); 
-    const nuevoEvento = new Evento({
 
+    // Crea un nuevo evento con los datos proporcionados
+    const nuevoEvento = new Evento({
       imagen: req.file.path,
       titulo: req.body.titulo,
       fecha: req.body.fecha,
-      descripcion: req.body.descripcion 
+      descripcion: req.body.descripcion,
+      categorias: categoriasSeleccionadas // Agregamos las categorías al evento
     });
-    await nuevoEvento.save();
-    res.status(201).json({ message: 'Evento agregado exitosamente' });
+
+    // Guarda el evento en la base de datos
+    const eventoGuardado = await nuevoEvento.save();
+
+    // Asocia el evento con las categorías seleccionadas
+    if (categoriasSeleccionadas && categoriasSeleccionadas.length > 0) {
+      await Categoria.updateMany(
+        { _id: { $in: categoriasSeleccionadas } },
+        { $push: { eventos: eventoGuardado._id } }
+      );
+    }
+
+    res.status(201).json({ message: 'Evento agregado exitosamente', evento: eventoGuardado });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
