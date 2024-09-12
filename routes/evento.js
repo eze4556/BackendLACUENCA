@@ -44,5 +44,8 @@ router.put('/:id', eventoController.updateEvento);
 // Ruta para eliminar un evento
 router.delete('/:id', eventoController.deleteEvento);
 
+router.get('/evento/categoria/:categoriaId', eventoController.getEventosPorCategoria);
+
+
 module.exports = router;
 
