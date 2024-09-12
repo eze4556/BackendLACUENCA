@@ -154,3 +154,23 @@ exports.updateEvento = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+
+// Controlador para obtener eventos por categoría
+exports.getEventosPorCategoria = async (req, res) => {
+  try {
+    const categoriaId = req.params.categoriaId;
+
+    // Encuentra eventos que estén asociados con la categoría proporcionada
+    const eventos = await Evento.find({ categorias: categoriaId });
+
+    if (eventos.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron eventos para la categoría proporcionada' });
+    }
+
+    res.json(eventos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
